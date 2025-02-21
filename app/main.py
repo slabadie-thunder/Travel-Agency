@@ -1,7 +1,6 @@
 import time
 from urllib.parse import urlparse
 
-from celery import Celery
 import structlog
 from asgi_correlation_id import CorrelationIdMiddleware
 from asgi_correlation_id.context import correlation_id
@@ -15,7 +14,6 @@ from uvicorn.protocols.utils import get_path_with_query_string
 from app.users.api.routers import api_router as users_router
 from app.auth.api.routers import api_router as auth_router
 from app.common.api.routers import api_router as common_router
-from app.celery.celery_settings import get_celery_settings
 from app.core.config import get_settings
 from app.custom_logging import setup_logging
 
@@ -30,11 +28,6 @@ setup_logging(json_logs=settings.LOG_JSON_FORMAT, log_level=settings.LOG_LEVEL)
 
 access_logger = structlog.stdlib.get_logger("api.access")
 
-celery = Celery(
-    settings.SERVER_NAME,
-)
-celery_settings = get_celery_settings()
-celery.config_from_object(celery_settings)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:

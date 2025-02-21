@@ -17,7 +17,6 @@ class CreateUserUseCase:
         self.session = session
 
     def execute(self, create_user_request: CreateUserRequest) -> UserResponse:
-        from app.celery.tasks.emails import send_welcome_email
 
         users_service = UsersService(self.session, users_repository)
         if users_service.get_by_email(create_user_request.email):

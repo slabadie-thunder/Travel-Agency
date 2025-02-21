@@ -1,9 +1,9 @@
 services:
-  db:
+  travel-agency-db:
     image: postgres:14
-    container_name: app-db
+    container_name: travel-agency-db
     volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
+      - travel-agency-db-data:/var/lib/postgresql/data/pgdata
     env_file:
       - .env
     ports:
@@ -11,9 +11,9 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
 
-  test-db:
+  travel-agency-test-db:
     image: postgres:14
-    container_name: app-test-db
+    container_name: travel-agency-test-db
     env_file:
       - .env.test
     ports:
@@ -24,65 +24,17 @@ services:
       - POSTGRES_PASSWORD=test
       - POSTGRES_DB=test-db
 
-  api:
+  travel-agency-api:
     build:
       context: .
     depends_on:
-      - db
-    container_name: app-api
+      - travel-agency-db
+    container_name: travel-agency-api
     env_file:
       - .env
     ports:
       - ${API_PORT:-8000}:8000
     volumes:
       - ./:/code/
-
-  celery_worker:
-    container_name: celery-worker
-    build:
-      context: .
-    entrypoint:
-      - app/celery/start-celery-worker.sh
-    depends_on:
-      - rabbitmq
-    env_file:
-      - .env
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./:/code/
-
-  celery_beat:
-    container_name: celery-beat
-    build:
-      context: .
-    entrypoint:
-      - app/celery/start-celery-beat.sh
-    depends_on:
-      - rabbitmq
-    env_file:
-      - .env
-    ports:
-      - "6479:6479"
-    volumes:
-      - ./:/code/
-
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:latest
-    ports:
-      - 5672:5672
-      - 15672:15672
-    environment:
-      RABBITMQ_DEFAULT_USER: "root"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq-password"
-    volumes:
-      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-    healthcheck:
-      test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 3
-
 volumes:
-  app-db-data:
+  travel-agency-db-data:
