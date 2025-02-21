@@ -1,0 +1,88 @@
+services:
+  db:
+    image: postgres:14
+    container_name: app-db
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT:-5432}:5432
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  test-db:
+    image: postgres:14
+    container_name: app-test-db
+    env_file:
+      - .env.test
+    ports:
+      - ${DB_PORT:-54321}:5432
+    environment:
+      - POSTGRES_SERVER=test-db
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test-db
+
+  api:
+    build:
+      context: .
+    depends_on:
+      - db
+    container_name: app-api
+    env_file:
+      - .env
+    ports:
+      - ${API_PORT:-8000}:8000
+    volumes:
+      - ./:/code/
+
+  celery_worker:
+    container_name: celery-worker
+    build:
+      context: .
+    entrypoint:
+      - app/celery/start-celery-worker.sh
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./:/code/
+
+  celery_beat:
+    container_name: celery-beat
+    build:
+      context: .
+    entrypoint:
+      - app/celery/start-celery-beat.sh
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env
+    ports:
+      - "6479:6479"
+    volumes:
+      - ./:/code/
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "root"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq-password"
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  app-db-data:
