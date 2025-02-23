@@ -17,7 +17,6 @@ class CreateUserUseCase:
         self.session = session
 
     def execute(self, create_user_request: CreateUserRequest) -> UserResponse:
-
         users_service = UsersService(self.session, users_repository)
         if users_service.get_by_email(create_user_request.email):
             raise HTTPException(
@@ -35,8 +34,6 @@ class CreateUserUseCase:
                 ),
             )
         )
-
-        send_welcome_email.delay(created_user.id)  # type: ignore
 
         return UserResponse(
             id=created_user.id,
