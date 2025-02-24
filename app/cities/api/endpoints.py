@@ -2,18 +2,25 @@ from fastapi import APIRouter, Depends
 from uuid import UUID
 
 from app.common.api.dependencies.get_db import SessionDependency
-from app.cities.schemas.city_schema import ListCitiesRequest, ListCitiesResponse, CityResponse
+from app.cities.schemas.city_schema import (
+    ListCitiesRequest,
+    ListCitiesResponse,
+    CityResponse,
+)
 from app.cities.use_cases.list_cities_use_case import ListCitiesUseCase
 from app.cities.use_cases.get_city_use_case import GetCityUseCase
 from app.cities.use_cases.delete_city_use_case import DeleteCityUseCase
 from fastapi import HTTPException, status
-from app.common.exceptions.model_not_found_exception import ModelNotFoundException
+from app.common.exceptions.model_not_found_exception import (
+    ModelNotFoundException,
+)
 from app.cities.use_cases.update_city_use_case import UpdateCityUseCase
 from app.cities.schemas.city_schema import UpdateCityRequest
 from app.cities.use_cases.create_city_use_case import CreateCityUseCase
 from app.cities.schemas.city_schema import CreateCityRequest
 
 router = APIRouter()
+
 
 @router.get("")
 def list_cities(
@@ -31,11 +38,11 @@ def get_city(
     city_id: UUID,
 ) -> CityResponse:
     try:
-        return GetCityUseCase(session).execute(
-            city_id
-        )
+        return GetCityUseCase(session).execute(city_id)
     except ModelNotFoundException as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=e.message
+        )
 
 
 @router.delete("/{city_id}")
@@ -46,8 +53,10 @@ def delete_city(
     try:
         return DeleteCityUseCase(session).execute(city_id)
     except ModelNotFoundException as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
-    
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=e.message
+        )
+
 
 @router.post("")
 def create_city(
@@ -66,4 +75,6 @@ def update_city(
     try:
         return UpdateCityUseCase(session).execute(city_id, data)
     except ModelNotFoundException as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=e.message
+        )

@@ -10,5 +10,7 @@ class GetCityUseCase:
         self.session = session
 
     def execute(self, city_id: UUID) -> CityResponse:
-        city = CitiesService(self.session, cities_repository).get_by_id(city_id)
+        city = CitiesService(self.session, cities_repository).get_by_id(
+            city_id
+        )
         return CityResponse.model_validate(city)

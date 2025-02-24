@@ -1,4 +1,3 @@
-from app.cities.schemas.city_schema import CityResponse
 from app.cities.services.cities_service import CitiesService
 from app.cities.repositories.cities_repository import cities_repository
 from sqlalchemy.orm import Session

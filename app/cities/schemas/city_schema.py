@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import List
 from app.common.schemas.pagination_schema import ListFilter, ListResponse
 
+
 class CityBase(BaseModel):
     name: str
 
