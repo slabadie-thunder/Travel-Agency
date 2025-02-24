@@ -36,3 +36,7 @@ class ListCitiesRequest(ListFilter):
 
 class ListCitiesResponse(ListResponse[CityResponse]):
     data: List[CityResponse]
+
+
+class UpdateCityRequest(BaseModel):
+    name: str
