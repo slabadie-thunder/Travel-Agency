@@ -39,5 +39,5 @@ class ListCitiesResponse(ListResponse[CityResponse]):
     data: List[CityResponse]
 
 
-class UpdateCityRequest(BaseModel):
+class UpdateCityRequest(CityBase):
     name: str
