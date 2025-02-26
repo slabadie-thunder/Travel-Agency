@@ -10,7 +10,7 @@ class CityBase(BaseModel):
     name: str
 
 
-class CityCreate(BaseModel):
+class CityCreate(CityBase):
     name: str
 
 
