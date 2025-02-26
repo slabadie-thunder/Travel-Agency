@@ -25,7 +25,7 @@ class CreateCityUseCase:
 
         created_city = cities_service.create_city(
             CityCreate(
-                name=create_city_request.name,
+                name=create_city_request.name.lower(),
             )
         )
 

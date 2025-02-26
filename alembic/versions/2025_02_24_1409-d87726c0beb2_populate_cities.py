@@ -30,9 +30,9 @@ def upgrade() -> None:
     op.bulk_insert(
         cities_table,
         [
-            {"id": str(uuid.uuid4()), "name": "Montevideo"},
-            {"id": str(uuid.uuid4()), "name": "Canelones"},
-            {"id": str(uuid.uuid4()), "name": "Rocha"},
+            {"id": str(uuid.uuid4()), "name": "montevideo"},
+            {"id": str(uuid.uuid4()), "name": "canelones"},
+            {"id": str(uuid.uuid4()), "name": "rocha"},
         ],
     )
 
