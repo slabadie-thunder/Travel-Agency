@@ -27,7 +27,7 @@ class CityResponse(CityInDB):
     pass
 
 
-class CreateCityRequest(BaseModel):
+class CreateCityRequest(CityBase):
     name: str
 
 
