@@ -11,11 +11,11 @@ class CityBase(BaseModel):
 
 
 class CityCreate(CityBase):
-    name: str
+    pass
 
 
 class CityUpdate(BaseModel):
-    name: str | None = None
+    pass
 
 
 class CityInDB(CityBase):
@@ -28,7 +28,7 @@ class CityResponse(CityInDB):
 
 
 class CreateCityRequest(CityBase):
-    name: str
+    pass
 
 
 class ListCitiesRequest(ListFilter):
@@ -40,4 +40,4 @@ class ListCitiesResponse(ListResponse[CityResponse]):
 
 
 class UpdateCityRequest(CityBase):
-    name: str
+    pass
