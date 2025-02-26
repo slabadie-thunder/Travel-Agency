@@ -45,7 +45,7 @@ def get_city(
         )
 
 
-@router.delete("/{city_id}",status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{city_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_city(
     session: SessionDependency,
     city_id: UUID,
